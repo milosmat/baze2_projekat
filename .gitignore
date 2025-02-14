@@ -1,0 +1,16 @@
+# IntelliJ IDEA fajlovi
+.idea/
+*.iml
+
+# Java kompajlirani fajlovi
+*.class
+target/
+out/
+
+# Logovi
+logs/
+*.log
+
+# OS-specifični fajlovi
+.DS_Store
+Thumbs.db
