@@ -203,4 +203,41 @@ public class TimDAO {
             e.printStackTrace();
         }
     }
+
+    public void azurirajBrojBoraca(int idTim) {
+        String sql = """
+        UPDATE Tim t
+        SET brojboracatim = (
+            SELECT COUNT(*) FROM Borac b WHERE b.idtim = ?
+        )
+        WHERE t.idtim = ?
+        """;
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idTim);
+            ps.setInt(2, idTim);
+            int rows = ps.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("Tim ne postoji: " + idTim);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Greška pri ažuriranju broja boraca za tim " + idTim, e);
+        }
+    }
+
+
+    public void recalcBrojBoracaTx(int idTim, Connection conn) throws SQLException {
+        String sql = """
+        UPDATE Tim t
+        SET brojboracatim = (SELECT COUNT(*) FROM Borac b WHERE b.idtim = ?)
+        WHERE t.idtim = ?
+        """;
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idTim);
+            ps.setInt(2, idTim);
+            int rows = ps.executeUpdate();
+            if (rows != 1) throw new SQLException("Tim ne postoji: " + idTim);
+        }
+    }
+
 }

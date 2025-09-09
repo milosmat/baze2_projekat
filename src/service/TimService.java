@@ -26,5 +26,10 @@ public class TimService {
 
 
     public void azurirajBrojBoraca(int idTim) {
+        timDAO.azurirajBrojBoraca(idTim);
+    }
+
+    public void prikaziBrojBoracaPoTimuJednostavan() {
+        timDAO.brojBoracaPoTimu();
     }
 }
