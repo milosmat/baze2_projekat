@@ -92,4 +92,23 @@ public class BoracDAO {
         }
     }
 
+    public void addBoracTx(model.Borac borac, Connection conn) throws SQLException {
+        String selectMaxId = "SELECT COALESCE(MAX(idb), 0) AS max_id FROM Borac";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(selectMaxId)) {
+            int nextId = 1;
+            if (rs.next()) nextId = rs.getInt("max_id") + 1;
+            borac.setIdb(nextId);
+        }
+
+        String insertQuery = "INSERT INTO Borac (idb, imeb, prezimeb, idtim) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(insertQuery)) {
+            ps.setInt(1, borac.getIdb());
+            ps.setString(2, borac.getIme());
+            ps.setString(3, borac.getPrezime());
+            ps.setInt(4, borac.getIdTim());
+            ps.executeUpdate();
+        }
+    }
+
 }

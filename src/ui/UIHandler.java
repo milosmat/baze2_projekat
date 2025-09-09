@@ -10,12 +10,13 @@ public class UIHandler {
     private final TurnirService turnirService;
     private final SponzorService sponzorService;
     private final Scanner scanner;
-
+    private final TransakcijaService transakcijaService;
     public UIHandler() {
         this.boracService = new BoracService();
         this.timService = new TimService();
         this.turnirService = new TurnirService();
         this.sponzorService = new SponzorService();
+        this.transakcijaService = new TransakcijaService();
         this.scanner = new Scanner(System.in);
     }
 
@@ -127,8 +128,9 @@ public class UIHandler {
 
     private void prikaziIzvestaje() {
         System.out.println("\n📊 IZVJEŠTAJI 📊");
-        System.out.println("1. Broj boraca po turniru i kategoriji (jednostavan upit)");
+        System.out.println("1. Takmičari po kategoriji (kompleksan upit)");
         System.out.println("2. Broj boraca po timu i kategoriji (kompleksan upit)");
+        System.out.println("3. Broj boraca po timu (jednostavan upit)");
         System.out.print("Izaberite opciju: ");
         int opcija = scanner.nextInt();
         scanner.nextLine();
@@ -136,6 +138,7 @@ public class UIHandler {
         switch (opcija) {
             case 1 -> boracService.prikaziBorcePoKategoriji();
             case 2 -> prikaziBrojBoracaPoTimuIKategoriji();
+            case 3 -> timService.prikaziBrojBoracaPoTimuJednostavan();
             default -> System.out.println("❌ Pogrešan unos!");
         }
     }
@@ -165,9 +168,8 @@ public class UIHandler {
         int idTim = scanner.nextInt();
         scanner.nextLine();
 
-        // Dodavanje borca i ažuriranje broja boraca u timu
-        boracService.addBorac(ime, prezime, idTim);
-        timService.azurirajBrojBoraca(idTim);
-        System.out.println("✅ Borac dodat i broj boraca u timu ažuriran!");
+        transakcijaService.dodajBorcaIAzurirajTim(ime, prezime, idTim);
+
+        System.out.println("✅ Borac dodat i broj boraca u timu ažuriran (transakcija)!");
     }
 }
